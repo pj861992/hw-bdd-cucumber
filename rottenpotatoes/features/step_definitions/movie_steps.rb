@@ -75,8 +75,42 @@ Then /^I should not see the following movies: (.*)/ do |films|
   end
 end
 
-Then /I should see all the movies/ do
+Then(/^I should see all the movies$/) do
   # Make sure that all the movies in the app are visible in the table
-  assert(all("table#movies tr").count == Movie.all.count + 1)
+  #assert(all("table#movies tr").count == Movie.all.count + 1)
+  #page.all('table#movies tr').count.should == Movie.all.count + 1
+  #rows = page.all("table#movies tbody tr td[1]").map! {|list| list.text}
+  #assert ( rows.size == Movie.all.count )
+  db_size = 0
+  db_size = Movie.all.size
+  page.find(:xpath, "//table[@id=\"movies\"]/tbody[count(tr) = #{db_size} ]")
   #fail "Unimplemented"
+end
+
+#G PG PG-13 NC-17 R
+
+Given /^I uncheck all ratings/ do
+   # pending # express the regexp above with the code you wish you had
+  ratings = Array.new
+  ratings.push( "G" );
+  ratings.push( "PG" );
+  ratings.push( "PG-13" );
+  ratings.push( "NC-17" );
+  ratings.push( "R" );
+  ratings.each do |r|
+    uncheck("ratings_#{r}")
+  end
+end
+
+Given /^I check all ratings$/ do
+  # pending # express the regexp above with the code you wish you had
+  ratings = Array.new
+  ratings.push( "G" );
+  ratings.push( "PG" );
+  ratings.push( "PG-13" );
+  ratings.push( "NC-17" );
+  ratings.push( "R" );
+  ratings.each do |r|
+    check("ratings_#{r}")
+  end
 end
