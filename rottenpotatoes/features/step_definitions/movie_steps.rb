@@ -7,10 +7,14 @@ ActiveRecord::Schema.define do
         table.column :rating, :string
     table.column :release_date, :date
     end
+
 end
 
 class Movie < ActiveRecord::Base
-
+  attr_accessible :title, :rating, :description, :release_date
+  def self.all_ratings
+    %w(G PG PG-13 NC-17 R)
+  end
 end
 
 Given /the following movies exist/ do |movies_table|
@@ -28,7 +32,12 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  fail "Unimplemented"
+  e1index = page.body.index(e1)
+  e2index = page.body.index(e2)
+  if e1index != nil
+    e1index.should < e2index  
+  end
+  #fail "Unimplemented"
 end
 
 # Make it easier to express checking or unchecking several boxes at once
